@@ -1,6 +1,6 @@
 version: '3'
 services:
-    php71-first:
+    php71-symfony:
       build:
         context: ./images/php71
         args:
@@ -10,22 +10,8 @@ services:
         - ./www:/var/www
         - ./aliases/php71/bash.bashrc:/etc/bash.bashrc
       environment:
-        XDEBUG_CONFIG: "remote_host=192.168.220.1 remote_enable=1 remote_autostart=off  remote_port=9008"
-        PHP_IDE_CONFIG: "serverName=first"
-      networks:
-        - test-network
-    php71-two:
-      build:
-        context: ./images/php71
-        args:
-          - USER_ID
-          - GROUP_ID
-      volumes:
-        - ./www:/var/www
-        - ./aliases/php71/bash.bashrc:/etc/bash.bashrc
-      environment:
-        XDEBUG_CONFIG: "remote_host=192.168.220.1 remote_enable=1 remote_autostart=off  remote_port=9009"
-        PHP_IDE_CONFIG: "serverName=two"
+        XDEBUG_CONFIG: "remote_host=192.168.220.1 remote_enable=1 remote_autostart=off  remote_port=9000"
+        PHP_IDE_CONFIG: "serverName=symfonyInDocker"
       networks:
         - test-network
     nginx-test:
@@ -37,13 +23,11 @@ services:
       ports:
         - "8080:80"
       depends_on:
-        - php71-first
-        - php71-two
+        - php71-symfony
       networks:
         test-network:
           aliases: # алиасы нужны если нужно общаться внутри сети между хостами. Например, если вы используете api
-            - first.loc
-            - two.loc
+            - symfony-in-docker
 #    mysql:
 #      image: mysql:5.7
 #      ports:
